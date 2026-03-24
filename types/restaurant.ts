@@ -12,3 +12,7 @@ export interface Restaurant {
     postalCode: string;
   }
 }
+
+export type ApiResponse = {
+  restaurants: Restaurant[]
+}
