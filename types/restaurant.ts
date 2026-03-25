@@ -1,4 +1,4 @@
-export interface Restaurant {
+export interface APIRestaurant {
   name: string;
   id: string;
   cuisines: { name: string; uniqueName: string }[];
@@ -14,5 +14,14 @@ export interface Restaurant {
 }
 
 export type ApiResponse = {
-  restaurants: Restaurant[]
+  restaurants: APIRestaurant[]
+}
+
+export type Restaurant = {
+  id: string;
+  name: string;
+  cuisines: { name: string; uniqueName: string }[]
+  rating: number;
+  ratingCount: number;
+  address: string;
 }
