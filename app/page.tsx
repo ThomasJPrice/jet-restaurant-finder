@@ -1,4 +1,5 @@
 import RestaurantCard from "@/components/RestaurantCard";
+import SearchForm from "@/components/SearchForm";
 import { fetchRestaurants } from "@/lib/restaurants";
 import { Restaurant } from "@/types/restaurant";
 
@@ -20,7 +21,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-8">
-
+      <SearchForm />
       
       {restaurants?.length > 0 ? (
         <div className="grid grid-cols-1 gap-3">
