@@ -22,18 +22,25 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <main className="max-w-3xl mx-auto px-6 py-8">
       <SearchForm />
-      
-      {restaurants?.length > 0 ? (
-        <div className="grid grid-cols-1 gap-3">
-        {restaurants && restaurants.map((restaurant) => (
-          <RestaurantCard restaurant={restaurant} key={restaurant.id} />
-        ))}
-      </div>
-      ) : (
-        <div className="text-center">
-          <p>Enter your postcode to see near locations!</p>
+
+      {/* results */}
+      <div>
+        <p className="mb-4">Showing <span className="font-mono font-medium">{restaurants.length}</span> results for <span className="font-mono font-medium">{postcode}</span></p>
+
+        <div>
+          {restaurants?.length > 0 ? (
+            <div className="grid grid-cols-1">
+              {restaurants && restaurants.map((restaurant, index) => (
+                <RestaurantCard restaurant={restaurant} index={index} key={restaurant.id} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center">
+              <p>Enter your postcode to see near locations!</p>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </main>
   );
 }

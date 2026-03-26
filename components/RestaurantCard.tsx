@@ -2,30 +2,42 @@ import { Restaurant } from "@/types/restaurant"
 import React from "react"
 
 type RestaurantCardProps = {
-  restaurant: Restaurant
+  restaurant: Restaurant;
+  index: number;
 }
 
-const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
+const RestaurantCard = ({ restaurant, index }: RestaurantCardProps) => {
+  const ratingProgressPercent = restaurant.rating / 5 * 100
+
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-2.5 hover:border-gray-300 transition-colors">
-      <div className="flex justify-between items-start gap-2">
-        <h3 className="font-medium leading-snug">{restaurant.name}</h3>
+    <div className="flex py-4 border-t last:border-b border-[#a5a097] items-center">
+      {/* todo: allow for no index in case of not listing it and just card */}
+      <div className="mr-6 h-full flex">
+        <span className="text-xs font-mono mt-2">{String(index + 1).padStart(2, '0')}</span>
+      </div>
 
-        <div className="flex items-center gap-1 bg-gray-100 rounded-full px-2 py-0.5 shrink-0">
+      <div className="grow mr-4">
+        <h3 className="text-lg leading-tight font-serif">{restaurant.name}</h3>
 
-          <p className="text-sm"><span className="font-medium">{restaurant.rating.toFixed(1)}</span> <span className="text-gray-600">({restaurant.ratingCount})</span></p>
+        <ul className="text-sm font-semibold flex flex-wrap text-[#2b2926]">
+          {restaurant.cuisines.map((cuisine) => (
+            <li className="after:content-['·'] after:mx-1 last:after:content-['']" key={cuisine.uniqueName}>{cuisine.name}</li>
+          ))}
+        </ul>
+
+        <p className="text-sm italic text-[#5c5a56]">{restaurant.address}</p>
+      </div>
+
+      <div className="flex flex-col items-end">
+        <div className="mb-1">
+          <h4 className="text-2xl font-serif">{restaurant.rating.toFixed(1)}</h4>
+          <div className="w-full relative h-0.5 bg-black">
+            <div style={{ width: `${ratingProgressPercent}%`}} className="absolute top-0 left-0 h-0.5 bg-[#FF8000]"></div>
+          </div>
         </div>
+        <span className="text-xs text-right hidden sm:block font-mono">{restaurant.ratingCount} reviews</span>
+        <span className="text-xs text-right sm:hidden font-mono">({restaurant.ratingCount})</span>
       </div>
-
-      <div className="flex flex-wrap gap-1">
-        {restaurant?.cuisines && restaurant?.cuisines.map((cuisine) => (
-          <p className="text-sm font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200" key={cuisine.uniqueName}>
-            {cuisine.name}
-          </p>
-        ))}
-      </div>
-
-      <p className="text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-2">{restaurant.address}</p>
     </div>
   )
 }
