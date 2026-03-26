@@ -25,7 +25,7 @@ const RestaurantCard = ({ restaurant, index }: RestaurantCardProps) => {
           ))}
         </ul>
 
-        <p className="text-sm italic text-[#5c5a56]">{restaurant.address}</p>
+        <p className="text-sm italic text-[#4b4946]">{restaurant.address}</p>
       </div>
 
       <div className="flex flex-col items-end">
