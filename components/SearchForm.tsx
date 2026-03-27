@@ -32,9 +32,10 @@ const SearchForm = () => {
         value={postcode}
         onChange={(e) => setPostcode(e.target.value)}
         placeholder='Enter postcode'
-        className='w-full rounded border px-3 py-2' 
+        className='w-full rounded border px-3 py-2 uppercase placeholder:normal-case' 
+        aria-label='Postcode'
       />
-      <button className='rounded border px-4 py-2' type='submit'>Search</button>
+      <button className='rounded border px-4 py-2 cursor-pointer hover:bg-[#4b4946]/5 transition-colors duration-300' type='submit'>Search</button>
     </form>
   )
 }

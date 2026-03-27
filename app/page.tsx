@@ -21,6 +21,8 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-8">
+      <h1 className="mb-6 font-serif text-xl text-center">Find restaurants near <span className="font-bold text-[#FF8000] italic">you</span></h1>
+
       <SearchForm />
 
       {/* results */}
@@ -29,11 +31,11 @@ export default async function Home({ searchParams }: HomeProps) {
 
         <div>
           {restaurants?.length > 0 ? (
-            <div className="grid grid-cols-1">
+            <ul className="grid grid-cols-1">
               {restaurants && restaurants.map((restaurant, index) => (
                 <RestaurantCard restaurant={restaurant} index={index} key={restaurant.id} />
               ))}
-            </div>
+            </ul>
           ) : (
             <div className="text-center">
               <p>Enter your postcode to see near locations!</p>
