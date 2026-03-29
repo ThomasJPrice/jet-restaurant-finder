@@ -25,3 +25,12 @@ export type Restaurant = {
   ratingCount: number;
   address: string;
 }
+
+export type RestaurantError =
+  | { type: 'INVALID_POSTCODE'; message: string }
+  | { type: 'NOT_FOUND'; message: string }
+  | { type: 'API_ERROR'; message: string }
+
+export type RestaurantResult =
+  | { ok: true; data: Restaurant[] }
+  | { ok: false; error: RestaurantError }

@@ -1,7 +1,7 @@
 import RestaurantCard from "@/components/RestaurantCard";
 import SearchForm from "@/components/SearchForm";
 import { fetchRestaurants } from "@/lib/restaurants";
-import { Restaurant } from "@/types/restaurant";
+import { Restaurant, RestaurantError } from "@/types/restaurant";
 
 type HomeProps = {
   searchParams: Promise<{
@@ -14,9 +14,16 @@ export default async function Home({ searchParams }: HomeProps) {
   const postcode = params.postcode?.trim()
 
   let restaurants: Restaurant[] = [];
+  let error: RestaurantError | null = null
 
   if (postcode) {
-    restaurants = await fetchRestaurants(postcode)
+    const result = await fetchRestaurants(postcode)
+
+    if (result.ok === true) {
+      restaurants = result.data
+    } else {
+      error = result.error
+    }
   }
 
   return (
@@ -27,21 +34,31 @@ export default async function Home({ searchParams }: HomeProps) {
 
       {/* results */}
       <div>
-        <p className="mb-4">Showing <span className="font-mono font-medium">{restaurants.length}</span> results for <span className="font-mono font-medium">{postcode}</span></p>
+        {postcode && error && (
+          <p className="mb-4 text-red-600" role="alert">
+            {error.message}
+          </p>
+        )}
 
-        <div>
-          {restaurants?.length > 0 ? (
-            <ul className="grid grid-cols-1">
-              {restaurants && restaurants.map((restaurant, index) => (
+        {!postcode && (
+          <div className="text-center">
+            <p>Enter your postcode to see nearby locations.</p>
+          </div>
+        )}
+
+        {!error && restaurants.length > 0 && (
+          <>
+            <p className="mb-4">
+              Showing <span className="font-mono font-medium">{restaurants.length}</span> results for <span className="font-mono font-medium">{postcode}</span>
+            </p>
+
+            <ul>
+              {restaurants.map((restaurant, index) => (
                 <RestaurantCard restaurant={restaurant} index={index} key={restaurant.id} />
               ))}
             </ul>
-          ) : (
-            <div className="text-center">
-              <p>Enter your postcode to see near locations!</p>
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </main>
   );

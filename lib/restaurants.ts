@@ -1,4 +1,5 @@
-import { ApiResponse, APIRestaurant, Restaurant } from "@/types/restaurant"
+import { ApiResponse, APIRestaurant, Restaurant, RestaurantResult } from "@/types/restaurant"
+import { isValidPostcode, sanitisePostcode } from "./validation"
 
 export function mapRestaurant(restaurant: APIRestaurant): Restaurant {
   return {
@@ -11,19 +12,40 @@ export function mapRestaurant(restaurant: APIRestaurant): Restaurant {
   }
 }
 
-export async function fetchRestaurants(postalCode: string) {
-  // todo: validate postal code
+export async function fetchRestaurants(postalCode: string): Promise<RestaurantResult> {
+  const validPostcode = isValidPostcode(postalCode)
 
-  const BASE_URL = process.env.JET_BASE_URL
-  if (!BASE_URL) throw new Error('JET_BASE_URL environment variable not set')
+  if (!validPostcode) {
+    return { ok: false, error: { type: 'INVALID_POSTCODE', message: 'Please enter a valid UK postcode' }}
+  }
 
-  const response = await fetch(`${BASE_URL}/${postalCode}`)
-  if (!response.ok) throw new Error(`HTTP error ${response.status}`)
+  try {
+    const BASE_URL = process.env.JET_BASE_URL
+    
+    if (!BASE_URL) {
+      return { ok: false, error: { type: 'API_ERROR', message: 'Please add JET_BASE_URL in environment variables'}}
+    }
   
-  const data: ApiResponse = await response.json()
-  if (!data?.restaurants) return []
+    const response = await fetch(`${BASE_URL}/${sanitisePostcode(postalCode)}`)
 
-  return data.restaurants
-    .slice(0, 10)
-    .map(mapRestaurant)
+    if (!response.ok) {
+      return { ok: false, error: { type: 'API_ERROR', message: `Something went wrong (${response.status})`}}
+    }
+    
+    const data: ApiResponse = await response.json()
+    
+    if (!data?.restaurants?.length) {
+      return { ok: false, error: {type: 'NOT_FOUND', message: 'No restaurants found for this postcode.'}}
+    }
+  
+    return {
+      ok: true,
+      data: data.restaurants.slice(0,10).map(mapRestaurant)
+    }
+  } catch (error) {
+    return {
+      ok: false,
+      error: { type: 'API_ERROR', message: 'Unable to reach the restaurant service'}
+    }
+  }
 }
