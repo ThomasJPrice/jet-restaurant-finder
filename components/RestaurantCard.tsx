@@ -11,10 +11,11 @@ const RestaurantCard = ({ restaurant, index }: RestaurantCardProps) => {
 
   return (
     <div className="flex py-4 border-t last:border-b border-[#a5a097] items-center">
-      {/* todo: allow for no index in case of not listing it and just card */}
-      <div className="mr-6 flex">
-        <span className="text-xs font-mono">{String(index + 1).padStart(2, '0')}</span>
-      </div>
+      {index !== undefined && (
+        <div className="mr-6 flex">
+          <span className="text-xs font-mono">{String(index + 1).padStart(2, '0')}</span>
+        </div>
+      )}
 
       <div className="grow mr-4">
         <h2 className="text-lg leading-tight font-serif">{restaurant.name}</h2>
@@ -32,7 +33,7 @@ const RestaurantCard = ({ restaurant, index }: RestaurantCardProps) => {
         <div className="mb-1">
           <span className="text-2xl font-serif">{restaurant.rating.toFixed(1)}</span>
           <div className="w-full relative h-0.5 bg-[#4b4946]">
-            <div style={{ width: `${ratingProgressPercent}%`}} className="absolute top-0 left-0 h-0.5 bg-[#FF8000]"></div>
+            <div style={{ width: `${ratingProgressPercent}%` }} className="absolute top-0 left-0 h-0.5 bg-[#FF8000]"></div>
           </div>
         </div>
         <span className="text-xs text-right hidden sm:block font-mono">{restaurant.ratingCount} reviews</span>
