@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.className} ${geist.variable} ${geist_mono.variable} ${domine.variable} bg-[#F5F2ED] text-[#1A1814]`}
+      className={`${geist.className} ${geist.variable} ${geist_mono.variable} ${domine.variable} bg-surface text-ink`}
     >
       <body>{children}</body>
     </html>

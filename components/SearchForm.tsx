@@ -49,7 +49,7 @@ const SearchForm = () => {
           aria-label='Postcode'
           aria-describedby={error ? 'postcode-error' : undefined}
         />
-        <button className='rounded border px-4 py-2 cursor-pointer hover:bg-[#4b4946]/5 transition-colors duration-300' type='submit'>Search</button>
+        <button className='rounded border px-4 py-2 cursor-pointer hover:bg-ink-muted/5 transition-colors duration-300' type='submit'>Search</button>
       </div>
       {error && (
         <p id='postcode-error' className="text-sm text-red-600" role='alert'>

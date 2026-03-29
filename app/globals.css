@@ -3,5 +3,11 @@
 @theme inline {
   --font-sans: var(--font-geist);
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-domine)
+  --font-serif: var(--font-domine);
+  --color-surface: #F5F2ED;
+  --color-ink: #1A1814;
+  --color-brand: #FF8000;
+  --color-divider: #A5A097;
+  --color-ink-strong: #2B2926;
+  --color-ink-muted: #4B4946;
 }
