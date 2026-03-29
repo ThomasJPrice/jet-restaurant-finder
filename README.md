@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JET Restaurant Finder
+
+A web interface for finding restaurants near you using the Just Eat Takeaway.com API. Built as part of the Just Eat Takeaway.com Early Careers Software Engineering Programme.
+
+**[Live Demo](https://jet-restaurant-finder.vercel.app/)**
+
+---
+
+## Overview
+
+Enter a UK postcode to retrieve and display the 10 nearest restaurants, showing 4 data points - the name, cuisines, rating and address.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/ThomasJPrice/jet-restaurant-finder
+cd jet-restaurant-finder
+npm install
+```
+
+### Environment variables
+
+Create a `.env.local` file in the root of the project:
+
+```
+JET_BASE_URL=https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode
+```
+
+### Running locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 and enter a UK postcode - e.g. `CT1 2EH`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architecture and design decisions
 
-## Learn More
+- **searchParams over useState** - search state lives in the URL, making results shareable and bookmarkable.
+- **Suspense boudnary around results only** - the form stays visible during loading, keys force the fallback to reshow on every new search.
+- **Typed error results** - `fetchRestaurants` returns `{ ok: true, data }` or `{ ok: false, error }` rather than throwing, making error handling explicit
+- **Data transformation at the boundary** -  raw API data is mapped to a clean `Restaurant` type in `mapRestaurant`, decoupling components from the API shape to make it easier for development with no knowledge of the API.
+- **Client and server validation** - postcode is validated client-side for instant feedback, and again server-side as a defensive measure
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Assumptions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- The API returns results in a `restaurants` array on the response object. This array includes non-restaurant places like supermarkets (e.g. Morrisons), as these are classified as restaurants within the API. The application displays these without filtering by type.
+- Cuisines are defined in the API. Some values like 'Deals', 'Collect stamps' and 'Freebies' appear as cuisines in the API response and are displayed as such.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Improvements I would make
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Cuisine filtering** - filter restaurants by cuisine type via an additional searchParam (e.g. `?postcode=CT12EH&cuisine=italian), so filtered views would also be shareable. 
+- **Sorting** - sort the top 10 returned restaurants by rating client side. This sort would operate on the results already returned by the API rather than re-querying.
+- **Postcode autocomplete** - a suggestion list as the user types, using the postcodes.io API, reducing input errors.
+- **Pagination or load more** - the API returns way more than 10 results. A load more button could show additional restaurants without overwhelming the initial view.
+
+---
+
+## Tech stack
+
+- Next.JS 16 - App router, server components, suspense
+- Typescript
+- Tailwind CSS
+- Jest - unit testing
+- Vercel - deployment
