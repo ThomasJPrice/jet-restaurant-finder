@@ -36,8 +36,9 @@ const RestaurantCard = ({ restaurant, index }: RestaurantCardProps) => {
             <div style={{ width: `${ratingProgressPercent}%` }} className="absolute top-0 left-0 h-0.5 bg-brand"></div>
           </div>
         </div>
-        <span className="text-xs text-right hidden sm:block font-mono">{restaurant.ratingCount} reviews</span>
-        <span className="text-xs text-right sm:hidden font-mono">({restaurant.ratingCount})</span>
+        {/* <span className="text-xs text-right hidden sm:block font-mono">{restaurant.ratingCount} reviews</span>
+        <span className="text-xs text-right sm:hidden font-mono">({restaurant.ratingCount})</span> */}
+        {/* removed due to not being one of the 4 data points in the brief */}
       </div>
     </div>
   )
